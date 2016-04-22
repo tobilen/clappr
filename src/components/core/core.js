@@ -163,7 +163,7 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources.toString()];
     this.containers.forEach((container) => container.destroy())
-    this.mediaControl.container = null
+    this.activeContainer = null
     this.containerFactory.options = $.extend(this.options, {sources})
     this.containerFactory.createContainers().then((containers) => {
       this.setupContainers(containers)
@@ -185,11 +185,6 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_FULLSCREEN, Fullscreen.isFullscreen())
     this.updateSize()
     this.mediaControl.show()
-  }
-
-  setMediaControlContainer(container) {
-    this.mediaControl.setContainer(container)
-    this.mediaControl.render()
   }
 
   disableMediaControl() {
@@ -215,6 +210,7 @@ export default class Core extends UIObject {
     containers.map(this.appendContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
+    this.activeContainer = this.containers[0]
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.options.parentElement)
@@ -234,7 +230,7 @@ export default class Core extends UIObject {
 
   setupMediaControl(container) {
     if (this.mediaControl) {
-      this.mediaControl.setContainer(container)
+      this.activeContainer = container
     } else {
       this.options = $.extend({container: container, focusElement: this.el}, this.options)
       this.mediaControl = this.createMediaControl(this)
@@ -253,10 +249,7 @@ export default class Core extends UIObject {
   }
 
   getCurrentContainer() {
-    if (!this.mediaControl || !this.mediaControl.container) {
-      return this.containers[0]
-    }
-    return this.mediaControl.container
+    return this.activeContainer
   }
 
   getCurrentPlayback() {

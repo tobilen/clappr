@@ -1,28 +1,39 @@
 import {Config} from '../../src/base/utils'
-import Styler from '../../src/base/styler';
-import template from '../../src/base/template';
+import Styler from '../../src/base/styler'
+import template from '../../src/base/template'
+import UIObject from '../../src/base/ui_object'
 import MediaControl from '../../src/components/media_control'
 import FakePlayback from '../../src/base/playback'
 import Container from '../../src/components/container'
 
 describe('MediaControl', function() {
+  class FakeCore extends UIObject {
+    constructor(options = {}) {
+      super(options)
+      this.options = options
+    }
+  }
   beforeEach(function() {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});
-    this.mediaControl = new MediaControl({options: {container: this.container}});
+    this.core = new FakeCore()
+    this.core.activeContainer = this.container;
+    this.mediaControl = new MediaControl(this.core);
     localStorage.removeItem("clappr.localhost.volume")
   });
 
   describe('#constructor', function() {
     it('can be built muted', function() {
-      var mediaControl = new MediaControl({options: {mute: true, container: this.container}});
+      this.core.options = {mute: true}
+      var mediaControl = new MediaControl(this.core)
       expect(mediaControl.muted).to.be.equal(true);
       expect(mediaControl.volume).to.be.equal(0);
     });
 
     it('restores saved volume', function() {
       Config.persist('volume', 42)
-      var mediaControl = new MediaControl({options: {persistConfig: true, container: this.container}});
+      this.core.options = {persistConfig: true}
+      var mediaControl = new MediaControl(this.core)
 
       expect(mediaControl.volume).to.be.equal(42)
     });
@@ -72,8 +83,9 @@ describe('MediaControl', function() {
       // expected to be default value (100)
       expect(Config.restore("volume")).to.be.equal(100)
 
-      var mediacontrol = new MediaControl({options: {persistConfig: true, container: this.container}});
-      mediacontrol.setVolume(78)
+      this.core.options = {persistConfig: true}
+      var mediaControl = new MediaControl(this.core)
+      mediaControl.setVolume(78)
 
       expect(Config.restore("volume")).to.be.equal(78)
     })
@@ -83,8 +95,9 @@ describe('MediaControl', function() {
     // expected to be default value (100)
     expect(Config.restore("volume")).to.be.equal(100)
 
-    var mediacontrol = new MediaControl({options: {persistConfig: true, container: this.container}});
-    mediacontrol.setVolume(78)
+    this.core.options = {persistConfig: true}
+    var mediaControl = new MediaControl(this.core)
+    mediaControl.setVolume(78)
 
     expect(Config.restore("volume")).to.be.equal(78)
   });
@@ -94,10 +107,10 @@ describe('MediaControl', function() {
       class MyMediaControl extends MediaControl {
         get template() { return template(`<div>My HTML here</div>`) }
         get stylesheet () { return Styler.getStyleFor(`.my-css-class {}`) }
-        constructor(options) { super(options) }
       }
 
-      var mediaControl = new MyMediaControl({options: {mute: true, container: this.container}});
+      this.core.options = {mute: true}
+      var mediaControl = new MyMediaControl(this.core)
       mediaControl.render();
       expect(mediaControl.muted).to.be.equal(true);
       expect(mediaControl.volume).to.be.equal(0);

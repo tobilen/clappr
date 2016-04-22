@@ -83,7 +83,7 @@ export default class MediaControl extends UICorePlugin {
     super(core)
     this.options = this.core.options
     this.persistConfig = this.options.persistConfig
-    this.container = this.options.container
+    this.container = this.core.activeContainer
     this.currentPositionValue = null
     this.currentDurationValue = null
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
@@ -99,6 +99,10 @@ export default class MediaControl extends UICorePlugin {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
+  }
+
+  bindEvents() {
+    this.listenTo(this.core, Events.CORE_CONTAINER_ACTIVE, this.setContainer)
   }
 
   addEventListeners() {

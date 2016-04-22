@@ -55,7 +55,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get ended() {
-    return this.core.mediaControl.container.ended
+    return this.core.activeContainer.ended
   }
 
   /**
@@ -66,7 +66,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get buffering() {
-    return this.core.mediaControl.container.buffering
+    return this.core.activeContainer.buffering
   }
 
   /*
@@ -242,7 +242,7 @@ export default class Player extends BaseObject {
   }
 
   addContainerEventListeners() {
-    var container = this.core.mediaControl.container
+    var container = this.core.activeContainer
     if (!!container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
       this.listenTo(container, Events.CONTAINER_PAUSE, this.onPause)
@@ -373,7 +373,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   play() {
-    this.core.mediaControl.container.play();
+    this.core.activeContainer.play();
     return this;
   }
 
@@ -383,7 +383,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   pause() {
-    this.core.mediaControl.container.pause();
+    this.core.activeContainer.pause();
     return this;
   }
 
@@ -393,7 +393,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   stop() {
-    this.core.mediaControl.container.stop();
+    this.core.activeContainer.stop();
     return this;
   }
 
@@ -405,7 +405,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seek(time) {
-    this.core.mediaControl.container.seek(time);
+    this.core.activeContainer.seek(time);
     return this;
   }
 
@@ -416,7 +416,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seekPercentage(percentage) {
-    this.core.mediaControl.container.seekPercentage(percentage);
+    this.core.activeContainer.seekPercentage(percentage);
     return this;
   }
 
@@ -427,8 +427,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setVolume(volume) {
-    if (this.core && this.core.mediaControl) {
-      this.core.mediaControl.setVolume(volume);
+    if (this.core && this.core.activeContainer) {
+      this.core.activeContainer.setVolume(volume);
     }
     return this;
   }
@@ -439,7 +439,7 @@ export default class Player extends BaseObject {
    * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   getVolume() {
-    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
+    return this.core && this.core.activeContainer ? this.core.activeContainer.volume : 0;
   }
 
   /**
@@ -470,7 +470,7 @@ export default class Player extends BaseObject {
    * @return {Boolean} `true` if the current source is playing, otherwise `false`
    */
   isPlaying() {
-    return this.core.mediaControl.container.isPlaying();
+    return this.core.activeContainer.isPlaying();
   }
 
   /**
@@ -496,7 +496,7 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    var plugins = this.core.plugins.concat(this.core.activeContainer.plugins);
     return find(plugins, function(plugin) {
       return plugin.name === name;
     });
@@ -508,7 +508,7 @@ export default class Player extends BaseObject {
    * @return {Number} current time (in seconds) of the current source
    */
   getCurrentTime() {
-    return this.core.mediaControl.container.getCurrentTime()
+    return this.core.activeContainer.getCurrentTime()
   }
 
   /**
@@ -519,7 +519,7 @@ export default class Player extends BaseObject {
    * @return {Number} time (in seconds) that time "0" represents.
    */
   getStartTimeOffset() {
-   return this.core.mediaControl.container.getStartTimeOffset()
+   return this.core.activeContainer.getStartTimeOffset()
   }
 
   /**
@@ -528,6 +528,6 @@ export default class Player extends BaseObject {
    * @return {Number} duration time (in seconds) of the current source
    */
   getDuration() {
-    return this.core.mediaControl.container.getDuration()
+    return this.core.activeContainer.getDuration()
   }
 }
