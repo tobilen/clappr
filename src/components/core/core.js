@@ -51,6 +51,15 @@ export default class Core extends UIObject {
     return !!this.ready
   }
 
+  get activeContainer() {
+    return this._activeContainer
+  }
+
+  set activeContainer(container) {
+    this._activeContainer = container
+    this.trigger(Events.CORE_CONTAINER_ACTIVE, container)
+  }
+
   constructor(options) {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)

@@ -473,6 +473,12 @@ Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
  */
 Events.CORE_OPTIONS_CHANGE = 'core:options:change'
 /**
+ * Fired when the active container has changed
+ *
+ * @event CORE_ACTIVE_CONTAINER
+ */
+Events.CORE_OPTIONS_CHANGE = 'core:container:active'
+/**
  * Fired after creating containers, when the core is ready
  *
  * @event CORE_READY
