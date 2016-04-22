@@ -9,20 +9,20 @@ describe('MediaControl', function() {
   beforeEach(function() {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});
-    this.mediaControl = new MediaControl({container: this.container});
+    this.mediaControl = new MediaControl({options: {container: this.container}});
     localStorage.removeItem("clappr.localhost.volume")
   });
 
   describe('#constructor', function() {
     it('can be built muted', function() {
-      var mediaControl = new MediaControl({mute: true, container: this.container});
+      var mediaControl = new MediaControl({options: {mute: true, container: this.container}});
       expect(mediaControl.muted).to.be.equal(true);
       expect(mediaControl.volume).to.be.equal(0);
     });
 
     it('restores saved volume', function() {
       Config.persist('volume', 42)
-      var mediaControl = new MediaControl({persistConfig: true, container: this.container});
+      var mediaControl = new MediaControl({options: {persistConfig: true, container: this.container}});
 
       expect(mediaControl.volume).to.be.equal(42)
     });
@@ -72,7 +72,7 @@ describe('MediaControl', function() {
       // expected to be default value (100)
       expect(Config.restore("volume")).to.be.equal(100)
 
-      var mediacontrol = new MediaControl({persistConfig: true, container: this.container});
+      var mediacontrol = new MediaControl({options: {persistConfig: true, container: this.container}});
       mediacontrol.setVolume(78)
 
       expect(Config.restore("volume")).to.be.equal(78)
@@ -83,7 +83,7 @@ describe('MediaControl', function() {
     // expected to be default value (100)
     expect(Config.restore("volume")).to.be.equal(100)
 
-    var mediacontrol = new MediaControl({persistConfig: true, container: this.container});
+    var mediacontrol = new MediaControl({options: {persistConfig: true, container: this.container}});
     mediacontrol.setVolume(78)
 
     expect(Config.restore("volume")).to.be.equal(78)
@@ -97,7 +97,7 @@ describe('MediaControl', function() {
         constructor(options) { super(options) }
       }
 
-      var mediaControl = new MyMediaControl({mute: true, container: this.container});
+      var mediaControl = new MyMediaControl({options: {mute: true, container: this.container}});
       mediaControl.render();
       expect(mediaControl.muted).to.be.equal(true);
       expect(mediaControl.volume).to.be.equal(0);

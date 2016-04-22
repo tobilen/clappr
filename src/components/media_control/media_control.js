@@ -11,7 +11,7 @@ import {Config, Fullscreen, formatTime, extend} from 'base/utils'
 import Events from 'base/events'
 import Kibo from 'base/kibo'
 import Styler from 'base/styler'
-import UIObject from 'base/ui_object'
+import UICorePlugin from 'base/ui_core_plugin'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
 import template from 'base/template'
@@ -31,8 +31,14 @@ import fullscreenIcon from 'icons/06-expand.svg'
 import exitFullscreenIcon from 'icons/07-shrink.svg'
 import hdIcon from 'icons/08-hd.svg'
 
-export default class MediaControl extends UIObject {
-  get name() { return 'MediaControl' }
+const DEFAULT_SETTINGS = {
+  left: ['play', 'stop', 'pause'],
+  right: ['volume'],
+  default: ['position', 'seekbar', 'duration']
+}
+
+export default class MediaControl extends UICorePlugin {
+  get name() { return 'media_control' }
 
   get attributes() {
     return {
@@ -71,30 +77,19 @@ export default class MediaControl extends UIObject {
   get volume() { return (this.container && this.container.isReady) ? this.container.volume : this.intendedVolume }
   get muted() { return this.volume === 0 }
 
-  constructor(options) {
-    super(options)
-    this.options = options
+  get settings() { return this.container && this.container.settings || DEFAULT_SETTINGS }
+
+  constructor(core) {
+    super(core)
+    this.options = this.core.options
     this.persistConfig = this.options.persistConfig
-    this.container = options.container
+    this.container = this.options.container
     this.currentPositionValue = null
     this.currentDurationValue = null
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.addEventListeners()
-    this.settings = {
-      left: ['play', 'stop', 'pause'],
-      right: ['volume'],
-      default: ['position', 'seekbar', 'duration']
-    }
-
-    if (this.container) {
-      if (!$.isEmptyObject(this.container.settings)) {
-        this.settings = $.extend({}, this.container.settings)
-      }
-    } else {
-      this.settings = {}
-    }
 
     this.disabled = false
     if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless) {
@@ -198,7 +193,7 @@ export default class MediaControl extends UIObject {
   }
 
   mousemoveOnSeekBar(event) {
-    if (this.container.settings.seekEnabled) {
+    if (this.settings.seekEnabled) {
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
     }
@@ -251,7 +246,7 @@ export default class MediaControl extends UIObject {
   }
 
   startSeekDrag(event) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) return
     this.draggingSeekBar = true
     this.$el.addClass('dragging')
     this.$seekBarLoaded.addClass('media-control-notransition')
@@ -341,13 +336,14 @@ export default class MediaControl extends UIObject {
     if (this.container) {
       this.stopListening(this.container)
     }
+    this._oldSettings = this.settings
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
     // set the new container to match the volume of the last one
+    this.settingsUpdate()
     this.setVolume(this.intendedVolume)
     this.changeTogglePlay()
     this.addEventListeners()
-    this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
     if (this.container.mediaControlDisabled) {
       this.disable()
@@ -420,7 +416,7 @@ export default class MediaControl extends UIObject {
   }
 
   seek(event) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) return
     var offsetX = event.pageX - this.$seekBarContainer.offset().left
     var pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
@@ -479,9 +475,8 @@ export default class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    var settingsChanged = (JSON.stringify(this.settings) !== JSON.stringify(this.container.settings))
-    if (this.container.getPlaybackType() && settingsChanged) {
-      this.settings = $.extend({}, this.container.settings)
+    var settingsChanged = !this.rendered || (JSON.stringify(this._oldSettings) !== JSON.stringify(this.settings))
+    if (this.container && settingsChanged) {
       this.render()
     }
   }
@@ -546,7 +541,7 @@ export default class MediaControl extends UIObject {
   }
 
   seekRelative(delta) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.container.seekEnabled) return
     var currentTime = this.container.getCurrentTime()
     var duration = this.container.getDuration()
     var position = Math.min(Math.max(currentTime + delta, 0), duration)
@@ -561,7 +556,7 @@ export default class MediaControl extends UIObject {
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
     var keys = [1,2,3,4,5,6,7,8,9,0]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
   unbindKeyEvents() {
@@ -597,6 +592,7 @@ export default class MediaControl extends UIObject {
   }
 
   render() {
+    if (!this.container) return this
     var timeout = 1000
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(this.stylesheet)
@@ -625,7 +621,7 @@ export default class MediaControl extends UIObject {
     this.setSeekPercentage(previousSeekPercentage)
 
     process.nextTick(() => {
-      if (!this.container.settings.seekEnabled) {
+      if (!this.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
       if (!this.options.disableKeyboardShortcuts) {
