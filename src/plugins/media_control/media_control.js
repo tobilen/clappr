@@ -99,6 +99,7 @@ export default class MediaControl extends UICorePlugin {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
+    this.render()
   }
 
   bindEvents() {
@@ -638,6 +639,7 @@ export default class MediaControl extends UICorePlugin {
 
     this.rendered = true
     this.updateVolumeUI()
+    this.core.$el.append(this.el)
     this.core.trigger(Events.CORE_MEDIACONTROL_RENDERED)
     return this
   }

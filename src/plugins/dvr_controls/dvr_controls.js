@@ -21,6 +21,9 @@ export default class DVRControls extends UICorePlugin {
       'data-dvr-controls': '',
     }
   }
+  get mediaControl() {
+    return this.core.getPlugin('media_control')
+  }
 
   constructor(core) {
     super(core)
@@ -45,22 +48,21 @@ export default class DVRControls extends UICorePlugin {
 
   dvrChanged(dvrEnabled) {
     this.settingsUpdate()
-    this.core.mediaControl.$el.addClass('live')
+    this.mediaControl.$el.addClass('live')
     if (dvrEnabled) {
-      this.core.mediaControl.$el.addClass('dvr')
-      this.core.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide()
+      this.mediaControl.$el.addClass('dvr')
+      this.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide()
     } else {
-      this.core.mediaControl.$el.removeClass('dvr')
+      this.mediaControl.$el.removeClass('dvr')
     }
   }
 
   click() {
-    var mediaControl = this.core.mediaControl
-    var container = mediaControl.container
+    var container = this.mediaControl.container
     if (!container.isPlaying()) {
       container.play()
     }
-    if (mediaControl.$el.hasClass('dvr')) {
+    if (this.mediaControl.$el.hasClass('dvr')) {
       container.seek(container.getDuration())
     }
   }
@@ -84,8 +86,8 @@ export default class DVRControls extends UICorePlugin {
     this.$el.html(this.template())
     this.$el.append(this.style)
     if (this.shouldRender()) {
-      this.core.mediaControl.$el.addClass('live')
-      this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
+      this.mediaControl.$el.addClass('live')
+      this.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
     }
     return this
   }

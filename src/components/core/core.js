@@ -9,7 +9,6 @@ import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
 import Browser from 'components/browser'
 import ContainerFactory from 'components/container_factory'
-import MediaControl from 'components/media_control'
 import Mediator from 'components/mediator'
 import PlayerInfo from 'components/player_info'
 
@@ -60,13 +59,17 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_CONTAINER_ACTIVE, container)
   }
 
+  get mediaControl() { return this.getPlugin('media_control') }
+
   constructor(options) {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.options = options
     this.plugins = []
     this.containers = []
-    this.setupMediaControl(null)
+    this.listenTo(this, Events.CORE_MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
+    this.listenTo(this, Events.CORE_MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
+    this.listenTo(this, Events.CORE_MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
     //FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
@@ -175,7 +178,6 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
-    this.mediaControl.destroy()
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
@@ -211,7 +213,6 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.activeContainer = this.containers[0]
-    this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.options.parentElement)
     return this.containers
@@ -226,18 +227,6 @@ export default class Core extends UIObject {
     this.appendContainer(container)
     this.el.appendChild(container.render().el)
     return container
-  }
-
-  setupMediaControl(container) {
-    if (this.mediaControl) {
-      this.activeContainer = container
-    } else {
-      this.options = $.extend({container: container, focusElement: this.el}, this.options)
-      this.mediaControl = this.createMediaControl(this)
-      this.listenTo(this, Events.CORE_MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
-      this.listenTo(this, Events.CORE_MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
-      this.listenTo(this, Events.CORE_MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
-    }
   }
 
   createMediaControl(options) {
@@ -317,7 +306,6 @@ export default class Core extends UIObject {
   render() {
     var style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl});
     this.$el.append(style)
-    this.$el.append(this.mediaControl.render().el)
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()

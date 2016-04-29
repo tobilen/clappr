@@ -23,7 +23,7 @@ export default class SeekTime extends UICorePlugin {
       'data-seek-time': ''
     }
   }
-  get mediaControl() { return this.core.mediaControl }
+  get mediaControl() { return this.core.getPlugin('media_control') }
   get activeContainer() { return this.core.activeContainer }
   get isLiveStreamWithDvr() { return this.activeContainer && this.activeContainer.getPlaybackType() === Playback.LIVE && this.activeContainer.isDvrEnabled() }
   get durationShown() { return this.isLiveStreamWithDvr && !this.useActualLiveTime }
