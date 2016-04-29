@@ -47,7 +47,7 @@ export default class SeekTime extends UICorePlugin {
     this.listenTo(this.core, Events.CORE_MEDIACONTROL_RENDERED, this.render)
     this.listenTo(this.core, Events.CORE_MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
     this.listenTo(this.core, Events.CORE_MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
-    this.listenTo(this.core, Events.CORE_MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
+    this.listenTo(this.core, Events.CORE_CONTAINER_ACTIVE, this.onContainerChanged)
     if (this.activeContainer) {
       this.listenTo(this.activeContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
       this.listenTo(this.activeContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)

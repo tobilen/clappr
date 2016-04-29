@@ -341,6 +341,7 @@ export default class MediaControl extends UICorePlugin {
     this._oldSettings = this.settings
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
+    if (!container) return
     // set the new container to match the volume of the last one
     this.settingsUpdate()
     this.setVolume(this.intendedVolume)
@@ -350,7 +351,6 @@ export default class MediaControl extends UICorePlugin {
     if (this.container.mediaControlDisabled) {
       this.disable()
     }
-    this.core.trigger(Events.CORE_MEDIACONTROL_CONTAINERCHANGED)
   }
 
   showVolumeBar() {

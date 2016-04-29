@@ -689,13 +689,6 @@ Events.CORE_MEDIACONTROL_PLAYING = 'core:mediacontrol:playing'
  */
 Events.CORE_MEDIACONTROL_NOTPLAYING = 'core:mediacontrol:notplaying'
 /**
- * Fired when the container changed
- *
- * @event MEDIACONTROL_CONTAINERCHANGED
- */
-Events.CORE_MEDIACONTROL_CONTAINERCHANGED = 'core:mediacontrol:containerchanged'
-
-/**
  * Fired when the active container has changed
  *
  * @event CORE_CONTAINER_ACTIVE
