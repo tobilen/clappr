@@ -635,60 +635,76 @@ Events.CONTAINER_STATS_ADD = 'container:stats:add'
  */
 Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
-// MediaControl Events
-Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
+// Core Events
+/**
+ * Fired when the media control is rendered
+ *
+ * @event CORE_MEDIACONTROL_RENDERED
+ */
+Events.CORE_MEDIACONTROL_RENDERED = 'core:mediacontrol:rendered'
 /**
  * Fired when the player enters/exit on fullscreen
  *
- * @event MEDIACONTROL_FULLSCREEN
+ * @event CORE_MEDIACONTROL_FULLSCREEN
  */
-Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen'
+Events.CORE_MEDIACONTROL_FULLSCREEN = 'core:mediacontrol:fullscreen'
 /**
  * Fired when the media control shows
  *
- * @event MEDIACONTROL_SHOW
+ * @event CORE_MEDIACONTROL_SHOW
  */
-Events.MEDIACONTROL_SHOW = 'mediacontrol:show'
+Events.CORE_MEDIACONTROL_SHOW = 'core:mediacontrol:show'
 /**
  * Fired when the media control hides
  *
- * @event MEDIACONTROL_HIDE
+ * @event CORE_MEDIACONTROL_HIDE
  */
-Events.MEDIACONTROL_HIDE = 'mediacontrol:hide'
+Events.CORE_MEDIACONTROL_HIDE = 'core:mediacontrol:hide'
 /**
  * Fired when mouse enters on the seekbar
  *
- * @event MEDIACONTROL_MOUSEMOVE_SEEKBAR
+ * @event CORE_MEDIACONTROL_MOUSEMOVE_SEEKBAR
  * @param {Object} event
  * the javascript event
  */
-Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar'
+Events.CORE_MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'core:mediacontrol:mousemove:seekbar'
 /**
  * Fired when mouse leaves the seekbar
  *
- * @event MEDIACONTROL_MOUSELEAVE_SEEKBAR
+ * @event CORE_MEDIACONTROL_MOUSELEAVE_SEEKBAR
  * @param {Object} event
  * the javascript event
  */
-Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar'
+Events.CORE_MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'core:mediacontrol:mouseleave:seekbar'
 /**
  * Fired when the media is being played
  *
- * @event MEDIACONTROL_PLAYING
+ * @event CORE_MEDIACONTROL_PLAYING
  */
-Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing'
+Events.CORE_MEDIACONTROL_PLAYING = 'core:mediacontrol:playing'
 /**
  * Fired when the media is not being played
  *
- * @event MEDIACONTROL_NOTPLAYING
+ * @event CORE_MEDIACONTROL_NOTPLAYING
  */
-Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
+Events.CORE_MEDIACONTROL_NOTPLAYING = 'core:mediacontrol:notplaying'
 /**
- * Fired when the container was changed
+ * Fired when the container changed
  *
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
-Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
+Events.CORE_MEDIACONTROL_CONTAINERCHANGED = 'core:mediacontrol:containerchanged'
 
-// Core Events
+/**
+ * Fired when the active container has changed
+ *
+ * @event CORE_CONTAINER_ACTIVE
+ */
+Events.CORE_CONTAINER_ACTIVE = 'core:container:active'
+
+/**
+ * Fired when the containers are created
+ *
+ * @event CORE_CONTAINERS_CREATED
+ */
 Events.CORE_CONTAINERS_CREATED = 'core:containers:created'

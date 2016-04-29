@@ -30,7 +30,7 @@ export default class Favicon extends CorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    this.listenTo(this.core, Events.CORE_MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     if (this.core.mediaControl.container) {
       this.containerChanged()
     }
@@ -38,11 +38,11 @@ export default class Favicon extends CorePlugin {
 
   containerChanged() {
     this.stopListening(this.core.mediaControl.container)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAY, this.setPlayIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PAUSE, this.setPauseIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STOP, this.resetIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ENDED, this.resetIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ERROR, this.resetIcon)
+    this.listenTo(this.core.activeContainer, Events.CONTAINER_PLAY, this.setPlayIcon)
+    this.listenTo(this.core.activeContainer, Events.CONTAINER_PAUSE, this.setPauseIcon)
+    this.listenTo(this.core.activeContainer, Events.CONTAINER_STOP, this.resetIcon)
+    this.listenTo(this.core.activeContainer, Events.CONTAINER_ENDED, this.resetIcon)
+    this.listenTo(this.core.activeContainer, Events.CONTAINER_ERROR, this.resetIcon)
     this.resetIcon()
   }
 

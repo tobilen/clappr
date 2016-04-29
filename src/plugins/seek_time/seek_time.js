@@ -24,8 +24,8 @@ export default class SeekTime extends UICorePlugin {
     }
   }
   get mediaControl() { return this.core.mediaControl }
-  get mediaControlContainer() { return this.mediaControl.container }
-  get isLiveStreamWithDvr() { return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
+  get activeContainer() { return this.core.activeContainer }
+  get isLiveStreamWithDvr() { return this.activeContainer && this.activeContainer.getPlaybackType() === Playback.LIVE && this.activeContainer.isDvrEnabled() }
   get durationShown() { return this.isLiveStreamWithDvr && !this.useActualLiveTime }
   get useActualLiveTime() { return this.actualLiveTime && this.isLiveStreamWithDvr }
   constructor(core) {
@@ -44,13 +44,13 @@ export default class SeekTime extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_RENDERED, this.render)
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
-    if (this.mediaControlContainer) {
-      this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
-      this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+    this.listenTo(this.core, Events.CORE_MEDIACONTROL_RENDERED, this.render)
+    this.listenTo(this.core, Events.CORE_MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
+    this.listenTo(this.core, Events.CORE_MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
+    this.listenTo(this.core, Events.CORE_MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
+    if (this.activeContainer) {
+      this.listenTo(this.activeContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
+      this.listenTo(this.activeContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
     }
   }
 
@@ -138,7 +138,7 @@ export default class SeekTime extends UICorePlugin {
   }
 
   shouldBeVisible() {
-    return this.mediaControlContainer && this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null
+    return this.activeContainer && this.activeContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null
   }
 
   render() {

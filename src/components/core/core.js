@@ -234,9 +234,9 @@ export default class Core extends UIObject {
     } else {
       this.options = $.extend({container: container, focusElement: this.el}, this.options)
       this.mediaControl = this.createMediaControl(this)
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
+      this.listenTo(this, Events.CORE_MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
+      this.listenTo(this, Events.CORE_MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
+      this.listenTo(this, Events.CORE_MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
     }
   }
 

@@ -186,11 +186,11 @@ export default class MediaControl extends UICorePlugin {
     if (this.container && this.container.isPlaying()) {
       this.$playPauseToggle.append(pauseIcon)
       this.$playStopToggle.append(stopIcon)
-      this.trigger(Events.MEDIACONTROL_PLAYING)
+      this.core.trigger(Events.CORE_MEDIACONTROL_PLAYING)
     } else {
       this.$playPauseToggle.append(playIcon)
       this.$playStopToggle.append(playIcon)
-      this.trigger(Events.MEDIACONTROL_NOTPLAYING)
+      this.core.trigger(Events.CORE_MEDIACONTROL_NOTPLAYING)
     }
     this.applyButtonStyle(this.$playPauseToggle)
     this.applyButtonStyle(this.$playStopToggle)
@@ -201,11 +201,11 @@ export default class MediaControl extends UICorePlugin {
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
     }
-    this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
+    this.core.trigger(Events.CORE_MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
   }
 
   mouseleaveOnSeekBar(event) {
-    this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event)
+    this.core.trigger(Events.CORE_MEDIACONTROL_MOUSELEAVE_SEEKBAR, event)
   }
 
   onVolumeClick(event) {
@@ -322,16 +322,14 @@ export default class MediaControl extends UICorePlugin {
     }
 
     if (!this.container) {
-      this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => {
-        setWhenContainerReady()
-      })
+      this.listenToOnce(this.core, Events.CORE_CONTAINER_ACTIVE, setWhenContainerReady)
     } else {
       setWhenContainerReady()
     }
   }
 
   toggleFullscreen() {
-    this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name)
+    this.core.trigger(Events.CORE_MEDIACONTROL_FULLSCREEN, this.name)
     this.container.fullscreen()
     this.resetUserKeepVisible()
   }
@@ -352,7 +350,7 @@ export default class MediaControl extends UICorePlugin {
     if (this.container.mediaControlDisabled) {
       this.disable()
     }
-    this.trigger(Events.MEDIACONTROL_CONTAINERCHANGED)
+    this.core.trigger(Events.CORE_MEDIACONTROL_CONTAINERCHANGED)
   }
 
   showVolumeBar() {
@@ -455,7 +453,7 @@ export default class MediaControl extends UICorePlugin {
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
       this.$el.show()
-      this.trigger(Events.MEDIACONTROL_SHOW, this.name)
+      this.core.trigger(Events.CORE_MEDIACONTROL_SHOW, this.name)
       this.$el.removeClass('media-control-hide')
       this.hideId = setTimeout(() => this.hide(), timeout)
       if (event) {
@@ -472,7 +470,7 @@ export default class MediaControl extends UICorePlugin {
     if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
-      this.trigger(Events.MEDIACONTROL_HIDE, this.name)
+      this.core.trigger(Events.CORE_MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
       this.hideVolumeBar(0)
     }
@@ -640,7 +638,7 @@ export default class MediaControl extends UICorePlugin {
 
     this.rendered = true
     this.updateVolumeUI()
-    this.trigger(Events.MEDIACONTROL_RENDERED)
+    this.core.trigger(Events.CORE_MEDIACONTROL_RENDERED)
     return this
   }
 }
