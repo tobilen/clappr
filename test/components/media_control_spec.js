@@ -2,7 +2,7 @@ import {Config} from '../../src/base/utils'
 import Styler from '../../src/base/styler'
 import template from '../../src/base/template'
 import UIObject from '../../src/base/ui_object'
-import MediaControl from '../../src/components/media_control'
+import MediaControl from '../../src/plugins/media_control'
 import FakePlayback from '../../src/base/playback'
 import Container from '../../src/components/container'
 
