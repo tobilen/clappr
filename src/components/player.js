@@ -190,6 +190,13 @@ export default class Player extends BaseObject {
       // if user iteraction is not allowed ensure keyboard shortcuts are disabled
       this.options.disableKeyboardShortcuts = true
     }
+    if (this.options.mediacontrol && this.options.mediacontrol.external) {
+      if (Array.isArray(this.options.plugins) || !this.options.plugins) {
+        this.options.plugins = [this.options.mediacontrol.external, ...(this.options.plugins, [])]
+      } else {
+        this.options.plugins.core = [this.options.mediacontrol.external, ...this.options.plugins.core]
+      }
+    }
     this.registerOptionEventListeners()
     this.coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)

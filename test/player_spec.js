@@ -1,5 +1,9 @@
 import Player from '../src/components/player'
 import Events from '../src/base/events'
+import Log from '../src/plugins/log'
+import MediaControl from '../src/plugins/media_control'
+
+import {template} from '../src/base/utils'
 
 describe('Player', function() {
   describe('constructor', function() {
@@ -58,6 +62,64 @@ describe('Player', function() {
         player.core.getCurrentContainer().playback.error()
         expect(onError).called.once
       }
+    })
+  })
+
+  describe('embed parameters', function() {
+    describe('custom media control', function() {
+      Log.setLevel(Log.LEVEL_ERROR + 1)
+      class CustomMediaControl extends MediaControl {
+        get template() { return template('<div>Tada!</div>') }
+      }
+
+      var player
+
+      afterEach(function() {
+        if (player) {
+          player.destroy()
+          player = null
+        }
+      })
+
+      it('should use the default media control when no special parameter is passed', function() {
+        var player = new Player({
+          source: '/playlist.m3u8',
+          persistConfig: false
+        })
+        player.attachTo(document.body)
+        expect(player.core.mediaControl).to.be.an.instanceof(MediaControl)
+        expect(player.core.mediaControl).not.to.be.an.instanceof(CustomMediaControl)
+      })
+
+      it('should support passing an external media control in plugins list', function() {
+        var player = new Player({
+          source: '/playlist.m3u8',
+          persistConfig: false,
+          plugins: [CustomMediaControl]
+        })
+        player.attachTo(document.body)
+        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+      })
+
+      it('should support passing an external media control in plugins hash parameter', function() {
+        var player = new Player({
+          source: '/playlist.m3u8',
+          persistConfig: false,
+          plugins: {core: [CustomMediaControl]}
+        })
+        player.attachTo(document.body)
+        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+      })
+
+      it('should support passing an external media control as part of the mediacontrol hash', function() {
+        var player = new Player({
+          source: '/playlist.m3u8',
+          persistConfig: false,
+          mediacontrol: {external: CustomMediaControl}
+        })
+        player.attachTo(document.body)
+        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+      })
     })
   })
 })
