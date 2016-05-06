@@ -81,14 +81,23 @@ describe('Player', function() {
         }
       })
 
+      it('should expose the media control through the getPlugin helper', function() {
+        var player = new Player({
+          source: '/playlist.m3u8',
+          persistConfig: false
+        })
+        player.attachTo(document.body)
+        expect(player.getPlugin('media_control')).to.equal(player.core.mediaControl)
+      })
+
       it('should use the default media control when no special parameter is passed', function() {
         var player = new Player({
           source: '/playlist.m3u8',
           persistConfig: false
         })
         player.attachTo(document.body)
-        expect(player.core.mediaControl).to.be.an.instanceof(MediaControl)
-        expect(player.core.mediaControl).not.to.be.an.instanceof(CustomMediaControl)
+        expect(player.getPlugin('media_control')).to.be.an.instanceof(MediaControl)
+        expect(player.getPlugin('media_control')).not.to.be.an.instanceof(CustomMediaControl)
       })
 
       it('should support passing an external media control in plugins list', function() {
@@ -98,7 +107,7 @@ describe('Player', function() {
           plugins: [CustomMediaControl]
         })
         player.attachTo(document.body)
-        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+        expect(player.getPlugin('media_control')).to.be.an.instanceof(CustomMediaControl)
       })
 
       it('should support passing an external media control in plugins hash parameter', function() {
@@ -108,7 +117,7 @@ describe('Player', function() {
           plugins: {core: [CustomMediaControl]}
         })
         player.attachTo(document.body)
-        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+        expect(player.getPlugin('media_control')).to.be.an.instanceof(CustomMediaControl)
       })
 
       it('should support passing an external media control as part of the mediacontrol hash', function() {
@@ -118,7 +127,7 @@ describe('Player', function() {
           mediacontrol: {external: CustomMediaControl}
         })
         player.attachTo(document.body)
-        expect(player.core.mediaControl).to.be.an.instanceof(CustomMediaControl)
+        expect(player.getPlugin('media_control')).to.be.an.instanceof(CustomMediaControl)
       })
     })
   })
