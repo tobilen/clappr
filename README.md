@@ -153,6 +153,9 @@ I'm sure you can do better than me.
 For advanced configuration, you can create an entire `MediaControl` object. At its most basic,
 you might consider subclassing the base `MediaControl` and using your own custom HTML and CSS.
 
+The `MediaControl` is an instance of `UICorePlugin`, meaning it's a core plugin which renders an element. It can be
+specified through the `plugins` parameter. Using the old `mediacontrol.external` parameter is deprecated.
+
 ```javascript
   // ES6-style code shown
   class MyMediaControl extends Clappr.MediaControl {
@@ -172,7 +175,7 @@ you might consider subclassing the base `MediaControl` and using your own custom
   }
   let player = new Clappr.Player({
     source: "http://your.video/here.mp4",
-    mediacontrol: MyMediaControl
+    plugins: [MyMediaControl]
   });
 ```
 
