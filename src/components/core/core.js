@@ -7,6 +7,7 @@ import {isNumber,Fullscreen, requestAnimationFrame, cancelAnimationFrame} from '
 import Events from 'base/events'
 import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
+import UICorePlugin from 'base/ui_core_plugin'
 import Browser from 'components/browser'
 import ContainerFactory from 'components/container_factory'
 import Mediator from 'components/mediator'
@@ -152,6 +153,9 @@ export default class Core extends UIObject {
 
   addPlugin(plugin) {
     this.plugins.push(plugin)
+    if (plugin instanceof UICorePlugin) {
+      this.$el.append((plugin.render(), plugin.el))
+    }
   }
 
   hasPlugin(name) {
