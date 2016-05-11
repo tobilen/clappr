@@ -10,11 +10,7 @@ import $ from 'clappr-zepto'
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
   get name() { return 'dvr_controls' }
-  get events() {
-    return {
-      'click .live-button': 'click'
-    }
-  }
+  get events() { return { click: this.click } }
   get attributes() {
     return {
       'class': 'dvr-controls',
@@ -69,10 +65,7 @@ export default class DVRControls extends UICorePlugin {
 
   settingsUpdate() {
     this.stopListening()
-    if(this.shouldRender()) {
-      this.render()
-      this.$el.click(() => this.click())
-    }
+    this.render()
     this.bindEvents()
   }
 
@@ -82,10 +75,10 @@ export default class DVRControls extends UICorePlugin {
   }
 
   render() {
-    this.style = this.style || Styler.getStyleFor(dvrStyle, { baseUrl: this.core.options.baseUrl })
-    this.$el.html(this.template())
-    this.$el.append(this.style)
     if (this.shouldRender()) {
+      this.style = this.style || Styler.getStyleFor(dvrStyle, { baseUrl: this.core.options.baseUrl })
+      this.$el.html(this.template())
+      this.$el.append(this.style)
       this.mediaControl.$el.addClass('live')
       this.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
     }
