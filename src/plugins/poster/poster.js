@@ -35,8 +35,6 @@ export default class PosterPlugin extends UIContainerPlugin {
     super(container)
     this.hasStartedPlaying = false
     this.playRequested = false
-    this.render()
-    process.nextTick(() => this.update())
   }
 
   bindEvents() {
