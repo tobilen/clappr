@@ -99,7 +99,6 @@ export default class MediaControl extends UICorePlugin {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
-    this.render()
   }
 
   bindEvents() {
