@@ -22,12 +22,14 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
     super(container)
     this.template = template(spinnerHTML);
     this.showTimeout = null
+  }
+
+  bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_ERROR, this.onStop)
-    this.render()
   }
 
   onBuffering() {
