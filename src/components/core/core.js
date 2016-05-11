@@ -154,7 +154,7 @@ export default class Core extends UIObject {
   addPlugin(plugin) {
     this.plugins.push(plugin)
     if (plugin instanceof UICorePlugin) {
-      this.$el.append((plugin.render(), plugin.el))
+      this.$el.append((plugin.render() || plugin).el)
     }
   }
 
