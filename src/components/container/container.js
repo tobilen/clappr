@@ -8,6 +8,7 @@
 
 import Events from 'base/events'
 import UIObject from 'base/ui_object'
+import UIContainerPlugin from 'base/ui_container_plugin'
 import Styler from 'base/styler'
 import style from './public/style.scss'
 import find from 'lodash.find'
@@ -327,6 +328,9 @@ export default class Container extends UIObject {
    */
   addPlugin(plugin) {
     this.plugins.push(plugin)
+    if (plugin instanceof UIContainerPlugin) {
+      this.$el.append((plugin.render() || plugin).el)
+    }
   }
 
   /**
