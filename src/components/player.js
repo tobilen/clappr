@@ -243,7 +243,7 @@ export default class Player extends BaseObject {
     } else {
       this._onReady()
     }
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
+    this.listenTo(this.core, Events.CORE_CONTAINER_ACTIVE, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     return this;
   }
