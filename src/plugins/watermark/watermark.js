@@ -16,7 +16,6 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   constructor(container) {
     super(container)
-    this.configure()
   }
 
   bindEvents() {
@@ -30,14 +29,13 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
     if (this.options.watermark) {
       this.imageUrl = this.options.watermark
       this.imageLink = this.options.watermarkLink
-      this.render()
     } else {
-      this.$el.remove()
+      this.$el.hide()
     }
   }
 
   onPlay() {
-    if (!this.hidden)
+    if (this.imageUrl)
       this.$el.show()
   }
 
@@ -46,7 +44,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
   }
 
   render() {
-    this.$el.hide()
+    this.configure()
     var templateOptions = {position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink}
     this.$el.html(this.template(templateOptions))
     var style = Styler.getStyleFor(watermarkStyle)
