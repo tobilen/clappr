@@ -87,7 +87,7 @@ export default class MediaControl extends UICorePlugin {
     this.currentDurationValue = null
     this.keepVisible = false
     this.addEventListeners()
-
+    this.intendedVolume = 100
     this.disabled = false
     if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless) {
       this.disable()
