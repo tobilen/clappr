@@ -119,14 +119,10 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$playButton.addClass('poster-icon')
     this.$playButton.attr('data-poster', '')
 
-    var buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
+    let controlOptions = this.options.mediaControl || { colors: this.options.mediacontrol }
+    let buttonsColor = controlOptions.colors && controlOptions.colors.buttons
     if (buttonsColor) {
       this.$el.find('svg path').css('fill', buttonsColor)
-    }
-
-    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
-      var buttonsColor = this.options.mediacontrol.buttons;
-      this.$playButton.css('color', buttonsColor);
     }
     this.update()
     return this
