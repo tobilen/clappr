@@ -549,7 +549,7 @@ export default class MediaControl extends UICorePlugin {
 
   bindKeyEvents() {
     this.unbindKeyEvents()
-    this.kibo = new Kibo(this.options.focusElement)
+    this.kibo = new Kibo(this.core.el)
     this.kibo.down(['space'], () => this.togglePlayPause())
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
