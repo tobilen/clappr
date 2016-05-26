@@ -6,7 +6,7 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime, extend} from 'base/utils'
+import {Fullscreen, formatTime, extend} from 'base/utils'
 
 import Events from 'base/events'
 import Kibo from 'base/kibo'
@@ -82,12 +82,9 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.options = this.core.options
-    this.persistConfig = this.options.persistConfig
     this.container = this.core.activeContainer
     this.currentPositionValue = null
     this.currentDurationValue = null
-    var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
-    this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.addEventListeners()
 
@@ -310,7 +307,6 @@ export default class MediaControl extends UICorePlugin {
     // it may not actually get set to this straight away
     // if the container is not ready etc
     this.intendedVolume = value
-    this.persistConfig && Config.persist("volume", value)
     var setWhenContainerReady = () => {
       if (this.container.isReady) {
         this.container.setVolume(value)
