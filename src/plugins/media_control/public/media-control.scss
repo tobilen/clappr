@@ -302,12 +302,15 @@
       .bar-container[data-volume] {
         float: left;
         position: relative;
-        overflow: hidden;
         top: 6px;
         width: 42px;
         height: 18px;
         padding: 3px 0;
         @include transition(width .2s ease-out);
+
+        &.segmented-bar {
+          overflow: hidden;
+        }
 
         .bar-background[data-volume] {
           height: 1px;
@@ -401,6 +404,7 @@
       .drawer-container[data-volume] {
         .bar-container[data-volume] {
           &.volume-bar-hide {
+            overflow: hidden;
             width: 0;
             height: 12px;
             top: 9px;

@@ -14,7 +14,7 @@
   <%  }; %>
   <%  var renderSegmentedBar = function(name, segments) {
       segments = segments || 10; %>
-    <div class="bar-container" data-<%= name %>>
+    <div class="bar-container segmented-bar" data-<%= name %>>
     <% for (var i = 0; i < segments; i++) { %>
       <div class="segmented-bar-element" data-<%= name %>></div>
     <% } %>

@@ -82,6 +82,12 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.options = this.core.options
+    // TODO: add vertical bar templates
+    let defaultVolumeBarOptions = { template: 'segmentedBar', orientation: 'horizontal'}
+    let defaultOptions = { autoHide: true, volumeBar: defaultVolumeBarOptions }
+    this.controlOptions = $.extend({}, defaultOptions, this.options.mediaControl)
+    this.controlOptions.volumeBar = $.extend({}, this.controlOptions.volumeBar)
+    this.autoHide = !!(this.controlOptions.autoHide || this.options.hideMediaControl)
     this.container = this.core.activeContainer
     this.currentPositionValue = null
     this.currentDurationValue = null
@@ -462,7 +468,7 @@ export default class MediaControl extends UICorePlugin {
   hide(delay = 0) {
     var timeout = delay || 2000
     clearTimeout(this.hideId)
-    if (!this.isVisible() || this.options.hideMediaControl === false) return
+    if (!this.isVisible() || this.autoHide === false) return
     if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
@@ -592,6 +598,8 @@ export default class MediaControl extends UICorePlugin {
   render() {
     if (!this.container) return this
     var timeout = 1000
+    this.settings.volumeBarTemplate = this.controlOptions.volumeBar.template
+    this.settings.volumeBarOrientation = this.controlOptions.volumeBar.orientation
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(this.stylesheet)
     this.createCachedElements()
