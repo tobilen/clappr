@@ -152,12 +152,12 @@ Enable Google Analytics events dispatch (play/pause/stop/buffering/etc) adding y
 ```
 
 ##### Control bar colors
-Customize control bar colors adding `mediacontrol` hash. Example:
+Customize control bar colors through the `mediaControl.colors` parameter. Example:
 
 ```javascript
   var player = new Clappr.Player({
     source: "http://your.video/here.mp4",
-    mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}
+    mediaControl: {colors: {seekbar: "#E113D3", buttons: "#66B2FF"}}
   });
 ```
 Result:
@@ -197,11 +197,23 @@ specified through the `plugins` parameter. Using the old `mediacontrol.external`
 
 ##### Media Control Auto Hide
 
-If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
+If you want to disable media control auto hide, set the `autoHide` property on the `mediaControl` parameter:
+```javascript
+let player = new Clappr.Player({
+  // ...
+  mediaControl: {autoHide: false}
+})
+```
 
 ##### Hide Volume Bar
 
-When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.
+When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by setting `autoHide: true` on the volume bar settings:
+```javascript
+let player = new Clappr.Player({
+  // ...
+  mediaControl: {volumeBar: {autoHide: true}}
+})
+```
 
 ##### Watermark
 Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. To define an URL to open when the watermark is clicked, use watermarkLink parameter. If the watermarkLink parameter not defined, the watermark will not be clickable. Example:
