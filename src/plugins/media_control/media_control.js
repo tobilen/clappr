@@ -83,12 +83,13 @@ export default class MediaControl extends UICorePlugin {
     super(core)
     this.options = this.core.options
     // TODO: add vertical bar templates
-    let defaultVolumeBarOptions = { template: 'segmentedBar', orientation: 'horizontal'}
+    let defaultVolumeBarOptions = { autoHide: false, template: 'segmentedBar', orientation: 'horizontal'}
     let defaultOptions = { autoHide: true, volumeBar: defaultVolumeBarOptions }
     this.controlOptions = $.extend({}, defaultOptions, this.options.mediaControl)
     this.controlOptions.volumeBar = $.extend({}, this.controlOptions.volumeBar)
     this.options.mediacontrol && (this.controlOptions.colors = $.extend({}, this.options.mediacontrol))
     this.autoHide = !!(this.controlOptions.autoHide || this.options.hideMediaControl)
+    this.autoHideVolumeBar = !!(this.controlOptions.volumeBar.autoHide || this.options.hideVolumeBar)
     this.container = this.core.activeContainer
     this.currentPositionValue = null
     this.currentDurationValue = null
@@ -231,7 +232,7 @@ export default class MediaControl extends UICorePlugin {
     }
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.removeClass('w320')
-    if (size.width <= 320 || this.options.hideVolumeBar) {
+    if (size.width <= 320 || this.autoHideVolumeBar) {
       this.$el.addClass('w320')
     }
   }
