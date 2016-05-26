@@ -149,7 +149,7 @@ describe('Utils', function() {
 
   describe('Config', function() {
     beforeEach(function() {
-      localStorage.removeItem("clappr.localhost.volume")
+      localStorage.removeItem("clappr.volume")
     })
 
     it('restores default volume', function() {

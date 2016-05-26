@@ -109,7 +109,7 @@ export class Config {
   }
 
   static _createKeyspace(key){
-    return `clappr.${document.domain}.${key}`
+    return `clappr.${key}`
   }
 
   static restore(key) {
