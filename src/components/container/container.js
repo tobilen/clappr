@@ -70,8 +70,8 @@ export default class Container extends UIObject {
   constructor(options) {
     super(options)
     this.currentTime = 0
-    this.volume = 100
     this.options = options
+    this.volume = this.options.mute ? 0 : 100
     this.playback = options.playback
     this.settings = $.extend({}, this.playback.settings)
     this.isReady = false
