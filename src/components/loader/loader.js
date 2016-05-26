@@ -30,6 +30,7 @@ import SeekTime from 'plugins/seek_time'
 import SourcesPlugin from 'plugins/sources'
 import EndVideo from 'plugins/end_video'
 import MediaControl from 'plugins/media_control'
+import PersistConfig from 'plugins/persist_config'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -50,7 +51,7 @@ export default class Loader extends BaseObject {
     this.playerId = playerId
     this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [MediaControl, DVRControls, SeekTime, SourcesPlugin, EndVideo, Favicon]
+    this.corePlugins = [MediaControl, DVRControls, SeekTime, SourcesPlugin, EndVideo, Favicon, PersistConfig]
     if (externalPlugins) {
       if (!Array.isArray(externalPlugins)) {
         this.validateExternalPluginsType(externalPlugins)
