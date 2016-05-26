@@ -87,6 +87,7 @@ export default class MediaControl extends UICorePlugin {
     let defaultOptions = { autoHide: true, volumeBar: defaultVolumeBarOptions }
     this.controlOptions = $.extend({}, defaultOptions, this.options.mediaControl)
     this.controlOptions.volumeBar = $.extend({}, this.controlOptions.volumeBar)
+    this.options.mediacontrol && (this.controlOptions.colors = $.extend({}, this.options.mediacontrol))
     this.autoHide = !!(this.controlOptions.autoHide || this.options.hideMediaControl)
     this.container = this.core.activeContainer
     this.currentPositionValue = null
@@ -573,9 +574,10 @@ export default class MediaControl extends UICorePlugin {
   }
 
   parseColors() {
-    if (this.options.mediacontrol) {
-      this.buttonsColor = this.options.mediacontrol.buttons
-      var seekbarColor = this.options.mediacontrol.seekbar
+    let colors = this.controlOptions.colors
+    if (colors) {
+      this.buttonsColor = colors.buttons
+      var seekbarColor = colors.seekbar
       this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
       this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor)
       this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + this.buttonsColor)
