@@ -19,24 +19,6 @@ describe('MediaControl', function() {
     this.core = new FakeCore()
     this.core.activeContainer = this.container;
     this.mediaControl = new MediaControl(this.core);
-    localStorage.removeItem("clappr.localhost.volume")
-  });
-
-  describe('#constructor', function() {
-    it('can be built muted', function() {
-      this.core.options = {mute: true}
-      var mediaControl = new MediaControl(this.core)
-      expect(mediaControl.muted).to.be.equal(true);
-      expect(mediaControl.volume).to.be.equal(0);
-    });
-
-    it('restores saved volume', function() {
-      Config.persist('volume', 42)
-      this.core.options = {persistConfig: true}
-      var mediaControl = new MediaControl(this.core)
-
-      expect(mediaControl.volume).to.be.equal(42)
-    });
   });
 
   describe('#setVolume', function() {
@@ -78,28 +60,6 @@ describe('MediaControl', function() {
       this.mediaControl.setVolume(0)
       expect(this.mediaControl.muted).to.be.equal(true)
     });
-
-    it('persists volume when persistence is on', function() {
-      // expected to be default value (100)
-      expect(Config.restore("volume")).to.be.equal(100)
-
-      this.core.options = {persistConfig: true}
-      var mediaControl = new MediaControl(this.core)
-      mediaControl.setVolume(78)
-
-      expect(Config.restore("volume")).to.be.equal(78)
-    })
-  });
-
-  it('persists volume when persistence is on', function() {
-    // expected to be default value (100)
-    expect(Config.restore("volume")).to.be.equal(100)
-
-    this.core.options = {persistConfig: true}
-    var mediaControl = new MediaControl(this.core)
-    mediaControl.setVolume(78)
-
-    expect(Config.restore("volume")).to.be.equal(78)
   });
 
   describe('custom media control', function() {
@@ -112,8 +72,6 @@ describe('MediaControl', function() {
       this.core.options = {mute: true}
       var mediaControl = new MyMediaControl(this.core)
       mediaControl.render();
-      expect(mediaControl.muted).to.be.equal(true);
-      expect(mediaControl.volume).to.be.equal(0);
       expect(mediaControl.$el.html()).to.be.equal(
         '<div>My HTML here</div><style class="clappr-style">.my-css-class {}</style>'
       );
